@@ -1,11 +1,38 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, Download, FileText } from 'lucide-react';
+import { X, Download, FileText, ExternalLink } from 'lucide-react';
 import { profile } from '@/data/content';
 import { usePrefersReducedMotion } from '@/lib/hooks';
+import { useState, useEffect } from 'react';
 
 export default function ResumeViewer({ open, onClose }) {
   const reduced = usePrefersReducedMotion();
   const resumeUrl = profile.resume;
+  const [isMobile, setIsMobile] = useState(false);
+  const [pdfError, setPdfError] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Check if PDF exists
+  useEffect(() => {
+    if (open) {
+      fetch(resumeUrl)
+        .then(res => {
+          if (!res.ok) {
+            setPdfError(true);
+          } else {
+            setPdfError(false);
+          }
+        })
+        .catch(() => setPdfError(true));
+    }
+  }, [open, resumeUrl]);
 
   return (
     <AnimatePresence>
@@ -51,30 +78,63 @@ export default function ResumeViewer({ open, onClose }) {
                 </button>
               </div>
             </div>
+
             <div className="flex-1 bg-navy-deep/40 relative">
-              <object
-                data={resumeUrl}
-                type="application/pdf"
-                className="absolute inset-0 h-full w-full"
-                aria-label="Resume preview"
-              >
+              {pdfError ? (
+                // Fallback when PDF doesn't load
                 <div className="absolute inset-0 grid place-items-center p-8 text-center">
                   <div>
-                    <FileText className="h-12 w-12 text-cyan-400 mx-auto mb-3" />
-                    <p className="text-white font-medium">Resume preview unavailable</p>
-                    <p className="text-slate-400 text-sm mt-1 mb-4">
-                      Place the PDF at {resumeUrl}
+                    <FileText className="h-16 w-16 text-cyan-400 mx-auto mb-4" />
+                    <p className="text-white font-medium text-lg">Resume not found</p>
+                    <p className="text-slate-400 text-sm mt-2 mb-6">
+                      Please make sure the PDF is in the public/resume/ folder
                     </p>
                     <a
                       href={resumeUrl}
                       download
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-med-500 to-cyan text-white text-sm font-semibold"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-med-500 to-cyan text-white font-semibold hover:scale-105 transition-transform"
                     >
-                      <Download className="h-4 w-4" /> Download instead
+                      <Download className="h-4 w-4" /> Download Resume
                     </a>
                   </div>
                 </div>
-              </object>
+              ) : (
+                // Use iframe for better mobile support
+                <iframe
+                  src={resumeUrl}
+                  className="absolute inset-0 h-full w-full"
+                  title="Resume preview"
+                  style={{ border: 'none' }}
+                />
+              )}
+
+              {/* Mobile fallback - shows when iframe doesn't load */}
+              {isMobile && !pdfError && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="pointer-events-auto bg-navy-deep/90 backdrop-blur-sm p-6 rounded-xl border border-white/10 mx-4">
+                    <FileText className="h-12 w-12 text-cyan-400 mx-auto mb-3" />
+                    <p className="text-white font-medium text-center">Viewing on mobile?</p>
+                    
+                    <div className="flex flex-col gap-3">
+                      <a
+                        href={resumeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-med-500 to-cyan text-white text-sm font-semibold"
+                      >
+                        <ExternalLink className="h-4 w-4" /> Open PDF
+                      </a>
+                      <a
+                        href={resumeUrl}
+                        download
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-white/10 text-white text-sm font-semibold hover:bg-white/20 transition-colors"
+                      >
+                        <Download className="h-4 w-4" /> Download
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         </motion.div>
