@@ -51,7 +51,7 @@ export default function Navbar() {
             </span>
             <span className="hidden sm:flex flex-col leading-none text-left">
               <span className="font-display font-bold text-navy text-sm">Amruta Thakare</span>
-              <span className="text-[10px] text-muted font-medium tracking-wide">B.Sc Nursing</span>
+              <span className="text-[10px] text-muted font-medium tracking-wide">B.Sc Nursing Graduate</span>
             </span>
           </button>
 
