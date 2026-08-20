@@ -8,7 +8,7 @@ export const profile = {
   intro:
     'Dedicated B.Sc Nursing student with clinical training and practical exposure in patient care, vital signs monitoring, basic nursing procedures, and patient documentation.',
   photo: '/AT.jpg', 
-  resume: '/resume/Amruta_Thakare_Resume.pdf',
+  resume: '/Amruta_Thakare_Resume.pdf',
 
 };
 
