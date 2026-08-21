@@ -5,8 +5,7 @@ export const profile = {
   role: 'B.Sc Nursing Student',
   status: 'Currently in 5th Semester',
   graduation: 'Expected Graduation 2028',
-  intro:
-    'Dedicated B.Sc Nursing student with clinical training and practical exposure in patient care, vital signs monitoring, basic nursing procedures, and patient documentation.',
+  intro: 'Dedicated B.Sc Nursing student with clinical training and practical exposure in patient care, vital signs monitoring, basic nursing procedures, and patient documentation.',
   photo: '/AT.jpg', 
   resume: '/Amruta_Thakare_Resume.pdf',
 
@@ -94,14 +93,14 @@ export const education = [
     degree: 'HSC',
     org: 'G.V. Khade Vidyalaya, Shahapur',
     location: 'Shahapur, Thane',
-    detail: 'Completed In 2024 with 48.33%',
+    detail: 'Completed in 2024 with a PCMB (Physics, Chemistry, Mathematics, and Biology) specialization.',
     status: 'placeholder',
   },
   {
     degree: 'SSC',
     org: 'Madhyamik Vidyalaya, Asangoan, Shahapur',
     location: 'Shahapur, Thane',
-    detail: 'Completed In 2022 with 82.80%',
+    detail: 'Completed in 2022 with a strong academic performance, achieving 82.80%.',
     status: 'placeholder',
   },
 ];
